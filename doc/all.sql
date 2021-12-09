@@ -1,0 +1,1 @@
+insert into "Test" (id, name, password) values (1.0, 'alex', 'password')
