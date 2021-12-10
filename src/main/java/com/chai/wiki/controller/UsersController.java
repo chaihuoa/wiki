@@ -1,7 +1,8 @@
 package com.chai.wiki.controller;
 
-import com.chai.wiki.domain.Users;
+import com.chai.wiki.req.UsersReq;
 import com.chai.wiki.resp.CommonResp;
+import com.chai.wiki.resp.UsersResp;
 import com.chai.wiki.service.UsersService;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -18,9 +19,9 @@ public class UsersController {
     private UsersService usersService;
 
     @GetMapping("/list")
-    public CommonResp list() {
-        CommonResp<List<Users>> resp = new CommonResp<>();
-        List<Users> list = usersService.list();
+    public CommonResp list(UsersReq req) {
+        CommonResp<List<UsersResp>> resp = new CommonResp<>();
+        List<UsersResp> list = usersService.list(req);
         resp.setContent(list);
         return resp;
     }
