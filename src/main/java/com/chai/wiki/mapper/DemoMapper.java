@@ -10,7 +10,7 @@ public interface DemoMapper {
 
     int deleteByExample(DemoExample example);
 
-    int deleteByPrimaryKey(Integer id);
+    int deleteByPrimaryKey(Long id);
 
     int insert(Demo record);
 
@@ -18,7 +18,7 @@ public interface DemoMapper {
 
     List<Demo> selectByExample(DemoExample example);
 
-    Demo selectByPrimaryKey(Integer id);
+    Demo selectByPrimaryKey(Long id);
 
     int updateByExampleSelective(@Param("record") Demo record, @Param("example") DemoExample example);
 
