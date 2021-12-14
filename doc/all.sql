@@ -1,24 +1,38 @@
-insert into "Test" (id, name, password) values (1.0, 'alex', 'password');
-insert into "demo" (id, name) values (1.0, 'bob');
-
-DROP TABLE IF EXISTS users;
-CREATE TABLE users (
-    id SERIAL NOT NULL,
-    address varchar(255) DEFAULT NULL,
-    birthday date DEFAULT NULL,
-    email varchar(255) DEFAULT NULL,
-    identity int DEFAULT NULL,
-    is_admin int DEFAULT NULL,
+DROP TABLE IF EXISTS `Test`;
+CREATE TABLE `Test` (
+    id bigint NOT NULL,
+    name varchar(255) DEFAULT NULL,
     password varchar(255) DEFAULT NULL,
-    size int DEFAULT NULL,
-    tel varchar(255) DEFAULT NULL,
-    username varchar(255) DEFAULT NULL,
     PRIMARY KEY (id)
 );
 
-INSERT INTO users VALUES ('1', 'Chicago', '2000-07-14', 'stu@gmail.com', '0', '1', '123', '2', '1357614550', 'stu');
-INSERT INTO users VALUES ('2', 'LA', '2000-07-14', 'tea@gmail.com', '1', '1', '123', '0', 'string', 'tea');
-INSERT INTO users VALUES ('3', 'NY', '2000-07-14', 'other@gmail.com', '2', '1', '123', '3', '1507886452', 'other');
-INSERT INTO users VALUES ('4', 'Chicago', '2000-07-16', 'admin@gmail.com', '3', '0', '123', '3', '1767988880', 'admin');
-INSERT INTO users VALUES ('8', 'Chicago', '1998-02-12', 'guest01@gmail.com', '3', '1', '123', '10', '1357600880', 'guest01');
-INSERT INTO users VALUES ('9', 'Chicago', '1982-01-01', 'guest02@gmail.com', '3', '1', '123', '10', '176822000', 'guest02');
+insert into `Test` (id, name, password) values (1.0, 'alex', 'password');
+
+DROP TABLE IF EXISTS `demo`;
+CREATE TABLE demo (
+    id bigint NOT NULL,
+    name varchar(255) DEFAULT NULL,
+    PRIMARY KEY (id)
+);
+
+insert into `demo` (id, name) values (1.0, 'bob');
+
+drop table if exists `ebook`;
+create table ebook (
+    id bigint not null ,
+    name varchar(50) not null,
+    category1_id bigint,
+    category2_id bigint,
+    description varchar(200),
+    cover varchar(200),
+    doc_count int,
+    view_count int,
+    vote_count int,
+    primary key (id)
+);
+
+insert into `ebook` (id, name, description) values (1, 'Spring boot 入门教程', '零基础入门 Java 开发，企业级应用开发最佳首选框架');
+insert into `ebook` (id, name, description) values (2, 'Vue 入门教程', '零基础入门 Vue 开发，企业级应用开发最佳首选框架');
+insert into `ebook` (id, name, description) values (3, 'Python 入门教程', '零基础入门 Python 开发，企业级应用开发最佳首选框架');
+insert into `ebook` (id, name, description) values (4, 'Mysql 入门教程', '零基础入门 Mysql 开发，企业级应用开发最佳首选框架');
+insert into `ebook` (id, name, description) values (5, 'Oracle 入门教程', '零基础入门 Oracle 开发，企业级应用开发最佳首选框架');
