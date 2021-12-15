@@ -97,7 +97,6 @@ export default defineComponent({
         const data = response.data;
         ebooks.value = data.content;
         console.log("onMounted2222");
-        console.log(response);
       })
     })
 
