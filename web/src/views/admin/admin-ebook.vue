@@ -38,7 +38,21 @@
       :confirm-loading="modalLoading"
       @ok="handleModalOk"
   >
-    <p>{{ modalText }}</p>
+
+    <a-form :model="ebook" :label-col="{ span: 6 }" :wrapper-col="{ span: 18 }">
+      <a-form-item label="封面">
+        <a-input v-model:value="ebook.cover" />
+      </a-form-item>
+      <a-form-item label="名称">
+        <a-input v-model:value="ebook.name" />
+      </a-form-item>
+      <a-form-item label="分类">
+        <a-input v-model:value="ebook.category1Id" />
+      </a-form-item>
+      <a-form-item label="描述">
+        <a-input v-model:value="ebook.description" type="textarea" />
+      </a-form-item>
+    </a-form>
   </a-modal>
 
 </template>
@@ -138,6 +152,7 @@ export default defineComponent({
     /**
      * 数组，[100, 101]对应：前端开发 / Vue
      */
+    const ebook = ref({});
     const modalText = ref<string>('Content of the modal');
     const modalVisible = ref(false);
     const modalLoading = ref(false);
@@ -155,6 +170,7 @@ export default defineComponent({
      */
     const edit = (record: any) => {
       modalVisible.value = true;
+      ebook.value = record;
     };
 
     onMounted(() => {
@@ -174,6 +190,7 @@ export default defineComponent({
       modalText,
       modalVisible,
       modalLoading,
+      ebook,
       edit,
       handleModalOk
     }
