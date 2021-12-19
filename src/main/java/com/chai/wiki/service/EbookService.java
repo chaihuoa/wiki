@@ -3,8 +3,9 @@ package com.chai.wiki.service;
 import com.chai.wiki.domain.Ebook;
 import com.chai.wiki.domain.EbookExample;
 import com.chai.wiki.mapper.EbookMapper;
-import com.chai.wiki.req.EbookReq;
-import com.chai.wiki.resp.EbookResp;
+import com.chai.wiki.req.EbookQueryReq;
+import com.chai.wiki.req.EbookSaveReq;
+import com.chai.wiki.resp.EbookQueryResp;
 import com.chai.wiki.resp.PageResp;
 import com.chai.wiki.util.CopyUtil;
 import com.github.pagehelper.PageHelper;
@@ -25,7 +26,7 @@ public class EbookService {
     @Resource
     private EbookMapper ebookMapper;
 
-    public PageResp<EbookResp> list(EbookReq req) {
+    public PageResp<EbookQueryResp> list(EbookQueryReq req) {
         EbookExample ebookExample = new EbookExample();
         EbookExample.Criteria criteria = ebookExample.createCriteria();
         if (!ObjectUtils.isEmpty(req.getName())) {
@@ -45,12 +46,21 @@ public class EbookService {
 //            respList.add(ebookResp);
 //        }
 
-        List<EbookResp> respList = CopyUtil.copyList(ebookList, EbookResp.class);
+        List<EbookQueryResp> respList = CopyUtil.copyList(ebookList, EbookQueryResp.class);
 
-        PageResp<EbookResp> pageResp = new PageResp<>();
+        PageResp<EbookQueryResp> pageResp = new PageResp<>();
         pageResp.setTotal(pageInfo.getTotal());
         pageResp.setList(respList);
 
         return pageResp;
+    }
+
+    public void save(EbookSaveReq req) {
+        Ebook ebook = CopyUtil.copy(req, Ebook.class);
+        if (ObjectUtils.isEmpty(ebook.getId())) {
+            ebookMapper.insert(ebook);
+        } else {
+            ebookMapper.updateByPrimaryKey(ebook);
+        }
     }
 }

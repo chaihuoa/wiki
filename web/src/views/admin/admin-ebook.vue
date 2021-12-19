@@ -62,6 +62,7 @@
 <script lang="ts">
 import { defineComponent, onMounted, ref } from 'vue';
 import axios from 'axios';
+import {message} from "ant-design-vue";
 
 export default defineComponent({
   name: 'AdminEbook',
@@ -116,9 +117,6 @@ export default defineComponent({
       }
     ];
 
-    /**
-     * 数据查询
-     **/
     const handleQuery = (params: any) => {
       loading.value = true;
       // 如果不清空现有数据，则编辑保存重新加载数据后，再点编辑，则列表显示的还是编辑前的数据
@@ -137,9 +135,6 @@ export default defineComponent({
       });
     };
 
-    /**
-     * 表格点击页码时触发
-     */
     const handleTableChange = (pagination: any) => {
       console.log("看看自带的分页参数都有啥：" + pagination);
       handleQuery({
@@ -148,26 +143,30 @@ export default defineComponent({
       });
     };
 
-    // -------- 表单 ---------
-    /**
-     * 数组，[100, 101]对应：前端开发 / Vue
-     */
+    // -------- Form ---------
     const ebook = ref({});
-    const modalText = ref<string>('Content of the modal');
     const modalVisible = ref(false);
     const modalLoading = ref(false);
+
     const handleModalOk = () => {
-      modalText.value = 'The modal will be closed after two seconds';
       modalLoading.value = true;
-      setTimeout(() => {
-        modalVisible.value = false;
+      axios.post("/ebook/save", ebook.value).then((response) => {
+        const data = response.data;
         modalLoading.value = false;
-      }, 2000);
+
+        if (data.success) {
+          modalVisible.value = false;
+
+          handleQuery({
+            page: pagination.value.current,
+            size: pagination.value.pageSize
+          });
+        } else {
+          message.error(data.message);
+        }
+      });
     };
 
-    /**
-     * 编辑
-     */
     const edit = (record: any) => {
       modalVisible.value = true;
       ebook.value = record;
@@ -187,7 +186,6 @@ export default defineComponent({
       loading,
       handleTableChange,
 
-      modalText,
       modalVisible,
       modalLoading,
       ebook,
