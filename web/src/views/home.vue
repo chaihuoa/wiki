@@ -74,18 +74,6 @@
 import {defineComponent, onMounted, ref} from 'vue';
 import axios from 'axios';
 
-const listData: Record<string, string>[] = [];
-
-for (let i = 0; i < 23; i++) {
-  listData.push({
-    href: 'https://www.antdv.com/',
-    name: `ant design vue part ${i}`,
-    cover: 'https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png',
-    description:
-        'Ant Design, a design language for background applications, is refined by Ant UED Team.'
-  });
-}
-
 export default defineComponent({
   name: 'Home',
   setup() {
@@ -93,9 +81,14 @@ export default defineComponent({
     const ebooks = ref();
 
     onMounted(() => {
-      axios.get("/ebook/list").then((response) => {
+      axios.get("/ebook/list", {
+        params: {
+          page: 1,
+          size: 1000
+        }
+      }).then((response) => {
         const data = response.data;
-        ebooks.value = data.content;
+        ebooks.value = data.content.list;
         console.log("onMounted2222");
       })
     })
@@ -108,7 +101,6 @@ export default defineComponent({
 
     return {
       ebooks,
-      listData,
       actions,
     }
   }
