@@ -8,6 +8,7 @@ import com.chai.wiki.req.EbookSaveReq;
 import com.chai.wiki.resp.EbookQueryResp;
 import com.chai.wiki.resp.PageResp;
 import com.chai.wiki.util.CopyUtil;
+import com.chai.wiki.util.SnowFlake;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import org.slf4j.Logger;
@@ -25,6 +26,9 @@ public class EbookService {
 
     @Resource
     private EbookMapper ebookMapper;
+
+    @Resource
+    private SnowFlake snowFlake;
 
     public PageResp<EbookQueryResp> list(EbookQueryReq req) {
         EbookExample ebookExample = new EbookExample();
@@ -58,6 +62,7 @@ public class EbookService {
     public void save(EbookSaveReq req) {
         Ebook ebook = CopyUtil.copy(req, Ebook.class);
         if (ObjectUtils.isEmpty(ebook.getId())) {
+            ebook.setId(snowFlake.nextId());
             ebookMapper.insert(ebook);
         } else {
             ebookMapper.updateByPrimaryKey(ebook);
