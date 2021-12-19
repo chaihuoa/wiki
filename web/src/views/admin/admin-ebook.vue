@@ -3,7 +3,13 @@
     <a-layout-content
         :style="{ background: '#fff', padding: '24px', margin: 0, minHeight: '280px' }"
     >
-      <a-table :columns="columns" :data-source="ebooks">
+      <a-table :columns="columns"
+               :row-key="record => record.id"
+               :pagination="pagination"
+               :loading="loading"
+               @change="handleTableChange"
+               :data-source="ebooks"
+      >
         <template #headerCell="{ column }">
         </template>
 
@@ -37,7 +43,7 @@ export default defineComponent({
     const ebooks = ref();
     const pagination = ref({
       current: 1,
-      pageSize: 10,
+      pageSize: 2,
       total: 0
     });
     const loading = ref(false);
@@ -90,12 +96,18 @@ export default defineComponent({
     const handleQuery = (params: any) => {
       loading.value = true;
       // 如果不清空现有数据，则编辑保存重新加载数据后，再点编辑，则列表显示的还是编辑前的数据
-      axios.get("/ebook/list", params).then((response) => {
+      axios.get("/ebook/list", {
+        params: {
+          page: params.page,
+          size: params.size
+        }
+      }).then((response) => {
         loading.value = false;
         const data = response.data;
-        ebooks.value = data.content;
+        ebooks.value = data.content.list;
 
         pagination.value.current = params.page;
+        pagination.value.total = data.content.total;
       });
     };
 
@@ -111,7 +123,10 @@ export default defineComponent({
     };
 
     onMounted(() => {
-      handleQuery({});
+      handleQuery({
+        page: 1,
+        size: pagination.value.pageSize
+      });
     });
 
     return {
