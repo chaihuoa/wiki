@@ -4,10 +4,28 @@
         :style="{ background: '#fff', padding: '24px', margin: 0, minHeight: '280px' }"
     >
       <p>
-        <a-button type="primary" @click="save" size="large">
-          新增
-        </a-button>
+        <a-form
+            layout="inline"
+            :model="formState"
+        >
+          <a-form-item>
+            <a-input v-model:value="formState.name" placeholder="name">
+              <template #prefix><UserOutlined style="color: rgba(0, 0, 0, 0.25)" /></template>
+            </a-input>
+          </a-form-item>
+          <a-form-item>
+            <a-button type="primary" @click="handleQuery({page: 1, size: pagination.pageSize})">
+              查询
+            </a-button>
+          </a-form-item>
+          <a-form-item>
+            <a-button type="primary" @click="save">
+              新增
+            </a-button>
+          </a-form-item>
+        </a-form>
       </p>
+
       <a-table :columns="columns"
                :row-key="record => record.id"
                :pagination="pagination"
@@ -81,6 +99,8 @@ import {message} from "ant-design-vue";
 export default defineComponent({
   name: 'AdminEbook',
   setup() {
+    const formState = ref();
+    formState.value = {};
     const ebooks = ref();
     const pagination = ref({
       current: 1,
@@ -137,7 +157,8 @@ export default defineComponent({
       axios.get("/ebook/list", {
         params: {
           page: params.page,
-          size: params.size
+          size: params.size,
+          name: formState.value.name
         }
       }).then((response) => {
         loading.value = false;
@@ -227,11 +248,14 @@ export default defineComponent({
       edit,
       save,
       handleDelete,
+      handleQuery,
 
       modalVisible,
       modalLoading,
       ebook,
-      handleModalOk
+      handleModalOk,
+
+      formState
     }
   }
 });
