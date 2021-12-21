@@ -9,12 +9,7 @@
             :model="formState"
         >
           <a-form-item>
-            <a-input v-model:value="formState.name" placeholder="name">
-              <template #prefix><UserOutlined style="color: rgba(0, 0, 0, 0.25)" /></template>
-            </a-input>
-          </a-form-item>
-          <a-form-item>
-            <a-button type="primary" @click="handleQuery({page: 1, size: pagination.pageSize})">
+            <a-button type="primary" @click="handleQuery()">
               查询
             </a-button>
           </a-form-item>
@@ -26,12 +21,13 @@
         </a-form>
       </p>
 
-      <a-table :columns="columns"
+      <a-table v-if="level1.length > 0"
+               :columns="columns"
                :row-key="record => record.id"
-               :pagination="pagination"
                :loading="loading"
-               @change="handleTableChange"
-               :data-source="categorys"
+               :data-source="level1"
+               :pagination="false"
+               :defaultExpandAllRows="true"
       >
         <template #headerCell="{ column }">
         </template>
@@ -76,7 +72,17 @@
         <a-input v-model:value="category.name" />
       </a-form-item>
       <a-form-item label="父分类">
-        <a-input v-model:value="category.parent" />
+        <a-select
+            v-model:value="category.parent"
+            ref="select"
+        >
+          <a-select-option :value="0">
+            无
+          </a-select-option>
+          <a-select-option v-for="c in level1" :key="c.id" :value="c.id" :disabled="category.id === c.id">
+            {{c.name}}
+          </a-select-option>
+        </a-select>
       </a-form-item>
       <a-form-item label="顺序">
         <a-input v-model:value="category.sort" />
@@ -100,11 +106,6 @@ export default defineComponent({
     const formState = ref();
     formState.value = {};
     const categorys = ref();
-    const pagination = ref({
-      current: 1,
-      pageSize: 4,
-      total: 0
-    });
     const loading = ref(false);
 
     const columns = [
@@ -113,11 +114,11 @@ export default defineComponent({
         dataIndex: 'name',
         key: 'name'
       },
-      {
-        title: '父分类',
-        key: 'parent',
-        dataIndex: 'parent'
-      },
+      // {
+      //   title: '父分类',
+      //   key: 'parent',
+      //   dataIndex: 'parent'
+      // },
       {
         title: '顺序',
         key: 'sort',
@@ -129,34 +130,33 @@ export default defineComponent({
       }
     ];
 
-    const handleQuery = (params: any) => {
+    /**
+     * 一级分类树，children属性就是二级分类
+     * [{
+     *   id: "",
+     *   name: "",
+     *   children: [{
+     *     id: "",
+     *     name: "",
+     *   }]
+     * }]
+     */
+    const level1 = ref(); // 一级分类树，children属性就是二级分类
+    level1.value = [];
+
+    const handleQuery = () => {
       loading.value = true;
-      // 如果不清空现有数据，则编辑保存重新加载数据后，再点编辑，则列表显示的还是编辑前的数据
-      axios.get("/category/list", {
-        params: {
-          page: params.page,
-          size: params.size,
-          name: formState.value.name
-        }
-      }).then((response) => {
+      axios.get("/category/all").then((response) => {
         loading.value = false;
         const data = response.data;
         if (data.success) {
-          categorys.value = data.content.list;
+          categorys.value = data.content;
 
-          pagination.value.current = params.page;
-          pagination.value.total = data.content.total;
+          level1.value = [];
+          level1.value = Tool.array2Tree(categorys.value, 0);
         } else {
           message.error(data.message);
         }
-      });
-    };
-
-    const handleTableChange = (pagination: any) => {
-      console.log("看看自带的分页参数都有啥：" + pagination);
-      handleQuery({
-        page: pagination.current,
-        size: pagination.pageSize
       });
     };
 
@@ -173,11 +173,7 @@ export default defineComponent({
 
         if (data.success) {
           modalVisible.value = false;
-
-          handleQuery({
-            page: pagination.value.current,
-            size: pagination.value.pageSize
-          });
+          handleQuery();
         } else {
           message.error(data.message);
         }
@@ -199,10 +195,7 @@ export default defineComponent({
         const data = response.data;
 
         if (data.success) {
-          handleQuery({
-            page: pagination.value.current,
-            size: pagination.value.pageSize
-          });
+          handleQuery();
         } else {
           message.error(data.message);
         }
@@ -210,18 +203,14 @@ export default defineComponent({
     };
 
     onMounted(() => {
-      handleQuery({
-        page: 1,
-        size: pagination.value.pageSize
-      });
+      handleQuery();
     });
 
     return {
-      categorys,
-      pagination,
+      // categorys,
+      level1,
       columns,
       loading,
-      handleTableChange,
 
       edit,
       save,
