@@ -2,10 +2,11 @@ package com.chai.wiki.controller;
 
 import com.chai.wiki.req.DocQueryReq;
 import com.chai.wiki.req.DocSaveReq;
-import com.chai.wiki.resp.DocQueryResp;
 import com.chai.wiki.resp.CommonResp;
+import com.chai.wiki.resp.DocQueryResp;
 import com.chai.wiki.resp.PageResp;
 import com.chai.wiki.service.DocService;
+import com.chai.wiki.util.ArrayUtil;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
@@ -42,10 +43,11 @@ public class DocController {
         return resp;
     }
 
-    @DeleteMapping("/delete/{id}")
-    public CommonResp delete(@PathVariable Long id) {
+    @DeleteMapping("/delete/{idsStr}")
+    public CommonResp delete(@PathVariable String idsStr) {
         CommonResp<Object> resp = new CommonResp<>();
-        docService.delete(id);
+        List<Long> list = ArrayUtil.strArrayConvertToLongList(idsStr);
+        docService.delete(list);
         return resp;
     }
 }
