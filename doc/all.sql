@@ -61,3 +61,22 @@ insert into `category` (id, parent, name, sort) values (500, 000, '其它', 500)
 insert into `category` (id, parent, name, sort) values (501, 500, '服务器', 501);
 insert into `category` (id, parent, name, sort) values (502, 500, '开发工具', 502);
 insert into `category` (id, parent, name, sort) values (503, 500, '热门服务端语言', 503);
+
+drop table if exists `doc`;
+create table `doc` (
+    id bigint not null,
+    ebook_id bigint not null default 0,
+    parent bigint not null default 0,
+    name varchar(50) not null,
+    sort int,
+    view_count int default 0,
+    vote_count int default 0,
+    primary key (id)
+);
+
+insert into `doc` (id, ebook_id, parent, name, sort, view_count, vote_count) VALUES (1, 1, 0, '文档1', 1, 0, 0);
+insert into `doc` (id, ebook_id, parent, name, sort, view_count, vote_count) VALUES (2, 1, 0, '文档1.1', 1, 0, 0);
+insert into `doc` (id, ebook_id, parent, name, sort, view_count, vote_count) VALUES (3, 1, 0, '文档2', 2, 0, 0);
+insert into `doc` (id, ebook_id, parent, name, sort, view_count, vote_count) VALUES (4, 1, 3, '文档2.1', 1, 0, 0);
+insert into `doc` (id, ebook_id, parent, name, sort, view_count, vote_count) VALUES (5, 1, 3, '文档2.2', 2, 0, 0);
+insert into `doc` (id, ebook_id, parent, name, sort, view_count, vote_count) VALUES (6, 1, 5, '文档2.2.1', 1, 0, 0);
