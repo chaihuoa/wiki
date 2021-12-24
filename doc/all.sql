@@ -80,3 +80,10 @@ insert into `doc` (id, ebook_id, parent, name, sort, view_count, vote_count) VAL
 insert into `doc` (id, ebook_id, parent, name, sort, view_count, vote_count) VALUES (4, 1, 3, '文档2.1', 1, 0, 0);
 insert into `doc` (id, ebook_id, parent, name, sort, view_count, vote_count) VALUES (5, 1, 3, '文档2.2', 2, 0, 0);
 insert into `doc` (id, ebook_id, parent, name, sort, view_count, vote_count) VALUES (6, 1, 5, '文档2.2.1', 1, 0, 0);
+
+drop table if exists `content`;
+create table `content` (
+    id bigint not null,
+    content mediumtext not null,
+    primary key (id)
+)
