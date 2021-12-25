@@ -184,6 +184,17 @@ export default defineComponent({
       });
     };
 
+    const handleQueryContent = () => {
+      axios.get("/doc/find-content/" + doc.value.id).then((response) => {
+        const data = response.data;
+        if (data.success) {
+          editor.txt.html(data.content);
+        } else {
+          message.error(data.message);
+        }
+      });
+    };
+
     // -------- Form ---------
     const editor = new E('#content')
     editor.config.zIndex = 0
@@ -202,6 +213,7 @@ export default defineComponent({
         modalLoading.value = false;
 
         if (data.success) {
+          message.success("保存成功");
           modalVisible.value = false;
           handleQuery();
         } else {
@@ -275,8 +287,10 @@ export default defineComponent({
     };
 
     const edit = (record: any) => {
+      editor.txt.html("");
       modalVisible.value = true;
       doc.value = Tool.copy(record);
+      handleQueryContent();
 
       // 不能选择当前节点及其所有子孙节点，作为父节点，会使树断开
       treeSelectData.value = Tool.copy(level1.value);
@@ -287,6 +301,7 @@ export default defineComponent({
     };
 
     const save = () => {
+      editor.txt.html("");
       modalVisible.value = true;
       doc.value = {
         ebookId: route.query.ebookId
