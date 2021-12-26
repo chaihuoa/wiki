@@ -1,6 +1,7 @@
 package com.chai.wiki.controller;
 
 import com.chai.wiki.req.UserQueryReq;
+import com.chai.wiki.req.UserResetPasswordReq;
 import com.chai.wiki.req.UserSaveReq;
 import com.chai.wiki.resp.CommonResp;
 import com.chai.wiki.resp.PageResp;
@@ -39,6 +40,14 @@ public class UserController {
     public CommonResp delete(@PathVariable Long id) {
         CommonResp<Object> resp = new CommonResp<>();
         userService.delete(id);
+        return resp;
+    }
+
+    @PostMapping("/reset-password")
+    public CommonResp resetPassword(@Valid @RequestBody UserResetPasswordReq req) {
+        req.setPassword(DigestUtils.md5DigestAsHex(req.getPassword().getBytes()));
+        CommonResp resp = new CommonResp<>();
+        userService.resetPassword(req);
         return resp;
     }
 }

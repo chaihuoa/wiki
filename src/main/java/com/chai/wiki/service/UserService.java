@@ -6,6 +6,7 @@ import com.chai.wiki.exception.BusinessException;
 import com.chai.wiki.exception.BusinessExceptionCode;
 import com.chai.wiki.mapper.UserMapper;
 import com.chai.wiki.req.UserQueryReq;
+import com.chai.wiki.req.UserResetPasswordReq;
 import com.chai.wiki.req.UserSaveReq;
 import com.chai.wiki.resp.PageResp;
 import com.chai.wiki.resp.UserQueryResp;
@@ -92,5 +93,10 @@ public class UserService {
         List<User> userList = userMapper.selectByExample(userExample);
 
         return CollectionUtils.isEmpty(userList) ? null : userList.get(0);
+    }
+
+    public void resetPassword(UserResetPasswordReq req) {
+        User user = CopyUtil.copy(req, User.class);
+        userMapper.updateByPrimaryKeySelective(user);
     }
 }
