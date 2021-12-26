@@ -16,6 +16,9 @@
       <a-menu-item key="/admin/category">
         <router-link to="/admin/category">Category</router-link>
       </a-menu-item>
+      <a-menu-item key="/admin/user">
+        <router-link to="/admin/user">User</router-link>
+      </a-menu-item>
       <a-menu-item key="/about">
         <router-link to="/about">About</router-link>
       </a-menu-item>

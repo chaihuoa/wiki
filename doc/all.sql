@@ -86,7 +86,7 @@ create table `content` (
     id bigint not null,
     content mediumtext not null,
     primary key (id)
-)
+);
 
 drop table if exists `user`;
 create table `user` (
@@ -96,4 +96,6 @@ create table `user` (
     password char(32) not null,
     primary key (id),
     unique key login_name_unique (login_name)
-)
+);
+
+insert into `user` (id, login_name, name, password) VALUES (1, 'test', 'test', 'test');
