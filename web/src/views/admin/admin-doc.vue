@@ -209,7 +209,9 @@ export default defineComponent({
     const treeSelectData = ref();
     treeSelectData.value = [];
     const doc = ref();
-    doc.value = {};
+    doc.value = {
+      ebookId: route.query.ebookId
+    };
     const modalVisible = ref(false);
     const modalLoading = ref(false);
 
@@ -311,9 +313,6 @@ export default defineComponent({
     const save = () => {
       editor.txt.html("");
       modalVisible.value = true;
-      doc.value = {
-        ebookId: route.query.ebookId
-      };
 
       // 不能选择当前节点及其所有子孙节点，作为父节点，会使树断开
       treeSelectData.value = Tool.copy(level1.value);
