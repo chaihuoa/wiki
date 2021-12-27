@@ -24,12 +24,12 @@ GET http://localhost:8880/test/list
 
 ###
 
-GET http://localhost:8880/redis/set/123/123
+GET http://localhost:8880/redis/set/test/test
 Accept: application/json
 
 ###
 
-GET http://localhost:8880/redis/get/123
+GET http://localhost:8880/redis/get/130534254080823296
 Accept: application/json
 
 ###
