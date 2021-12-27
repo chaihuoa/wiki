@@ -1,2 +1,0 @@
-GET http://localhost:8880/users/list?username=guest
-Accept: application/json
