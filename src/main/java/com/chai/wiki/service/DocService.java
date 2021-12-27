@@ -5,6 +5,7 @@ import com.chai.wiki.domain.Doc;
 import com.chai.wiki.domain.DocExample;
 import com.chai.wiki.mapper.ContentMapper;
 import com.chai.wiki.mapper.DocMapper;
+import com.chai.wiki.mapper.DocMapperCust;
 import com.chai.wiki.req.DocQueryReq;
 import com.chai.wiki.req.DocSaveReq;
 import com.chai.wiki.resp.DocQueryResp;
@@ -34,6 +35,9 @@ public class DocService {
 
     @Resource
     private SnowFlake snowFlake;
+
+    @Resource
+    private DocMapperCust docMapperCust;
 
     public List<DocQueryResp> all(Long ebookId) {
         DocExample docExample = new DocExample();
@@ -79,6 +83,8 @@ public class DocService {
         Content content = CopyUtil.copy(req, Content.class);
         if (ObjectUtils.isEmpty(doc.getId())) {
             doc.setId(snowFlake.nextId());
+            doc.setViewCount(0);
+            doc.setVoteCount(0);
             docMapper.insert(doc);
 
             content.setId(doc.getId());
@@ -105,6 +111,7 @@ public class DocService {
 
     public String findContent(Long id) {
         Content content = contentMapper.selectByPrimaryKey(id);
+        docMapperCust.increaseViewCount(id);
         String result = ObjectUtils.isEmpty(content) ? "" : content.getContent();
         return result;
     }
