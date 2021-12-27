@@ -75,7 +75,7 @@ export default defineComponent({
       axios.get("/doc/find-content/" + id).then((response) => {
         const data = response.data;
         if (data.success) {
-          html.value = id.toString();
+          html.value = data.content;
         } else {
           message.error(data.message);
         }
