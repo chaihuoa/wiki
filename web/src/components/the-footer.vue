@@ -1,17 +1,21 @@
 <template>
   <a-layout-footer style="text-align: center">
-    Ant Design ©2018 Created by Ant UED1111
+    {{user.name}}<span v-show="user.id">'s</span> Wiki.
   </a-layout-footer>
 </template>
 
 <script lang="ts">
-  import { defineComponent } from 'vue';
+import { defineComponent, computed, onMounted } from 'vue';
+import store from "@/store";
 
-  export default defineComponent({
-    name: 'the-footer',
-  });
+export default defineComponent({
+  name: 'the-footer',
+  setup() {
+    const user = computed(() => store.state.user);
+
+    return {
+      user
+    }
+  }
+});
 </script>
-
-<style scoped>
-
-</style>
