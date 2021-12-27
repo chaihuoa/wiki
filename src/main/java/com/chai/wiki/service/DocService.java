@@ -3,6 +3,8 @@ package com.chai.wiki.service;
 import com.chai.wiki.domain.Content;
 import com.chai.wiki.domain.Doc;
 import com.chai.wiki.domain.DocExample;
+import com.chai.wiki.exception.BusinessException;
+import com.chai.wiki.exception.BusinessExceptionCode;
 import com.chai.wiki.mapper.ContentMapper;
 import com.chai.wiki.mapper.DocMapper;
 import com.chai.wiki.mapper.DocMapperCust;
@@ -11,6 +13,8 @@ import com.chai.wiki.req.DocSaveReq;
 import com.chai.wiki.resp.DocQueryResp;
 import com.chai.wiki.resp.PageResp;
 import com.chai.wiki.util.CopyUtil;
+import com.chai.wiki.util.RedisUtil;
+import com.chai.wiki.util.RequestContext;
 import com.chai.wiki.util.SnowFlake;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
@@ -38,6 +42,9 @@ public class DocService {
 
     @Resource
     private DocMapperCust docMapperCust;
+
+    @Resource
+    public RedisUtil redisUtil;
 
     public List<DocQueryResp> all(Long ebookId) {
         DocExample docExample = new DocExample();
@@ -114,5 +121,16 @@ public class DocService {
         docMapperCust.increaseViewCount(id);
         String result = ObjectUtils.isEmpty(content) ? "" : content.getContent();
         return result;
+    }
+
+    public void vote(Long id) {
+        // docMapperCust.increaseVoteCount(id);
+        // 远程IP+doc.id作为key，24小时内不能重复
+        String ip = RequestContext.getRemoteAddr();
+        if (redisUtil.validateRepeat("DOC_VOTE_" + id + "_" + ip, 5000)) {
+            docMapperCust.increaseVoteCount(id);
+        } else {
+            throw new BusinessException(BusinessExceptionCode.VOTE_REPEAT);
+        }
     }
 }

@@ -36,7 +36,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, onMounted, ref, createVNode } from 'vue';
+import { defineComponent, onMounted, ref } from 'vue';
 import axios from 'axios';
 import {message} from 'ant-design-vue';
 import {Tool} from "@/util/tool";
@@ -75,7 +75,7 @@ export default defineComponent({
       axios.get("/doc/find-content/" + id).then((response) => {
         const data = response.data;
         if (data.success) {
-          html.value = data.content;
+          html.value = id.toString();
         } else {
           message.error(data.message);
         }
@@ -116,6 +116,18 @@ export default defineComponent({
       }
     };
 
+    // 点赞
+    const vote = () => {
+      axios.get('/doc/vote/' + doc.value.id).then((response) => {
+        const data = response.data;
+        if (data.success) {
+          doc.value.voteCount++;
+        } else {
+          message.error(data.message);
+        }
+      });
+    };
+
     onMounted(() => {
       handleQuery();
     });
@@ -126,6 +138,7 @@ export default defineComponent({
       onSelect,
       defaultSelectedKeys,
       doc,
+      vote
     }
   }
 });
