@@ -22,6 +22,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.slf4j.MDC;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.ObjectUtils;
 
 import javax.annotation.Resource;
@@ -89,6 +90,7 @@ public class DocService {
         return pageResp;
     }
 
+    @Transactional
     public void save(DocSaveReq req) {
         Doc doc = CopyUtil.copy(req, Doc.class);
         Content content = CopyUtil.copy(req, Content.class);
@@ -123,8 +125,7 @@ public class DocService {
     public String findContent(Long id) {
         Content content = contentMapper.selectByPrimaryKey(id);
         docMapperCust.increaseViewCount(id);
-        String result = ObjectUtils.isEmpty(content) ? "" : content.getContent();
-        return result;
+        return ObjectUtils.isEmpty(content) ? "" : content.getContent();
     }
 
     public void vote(Long id) {

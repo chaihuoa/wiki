@@ -20,7 +20,6 @@
       </a>
     </div>
     <a-menu
-        v-model:selectedKeys="selectedKeys1"
         theme="dark"
         mode="horizontal"
         :style="{ lineHeight: '64px' }"
