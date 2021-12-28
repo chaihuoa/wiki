@@ -99,3 +99,14 @@ create table `user` (
 );
 
 insert into `user` (id, login_name, name, password) VALUES (1, 'test', 'test', 'test');
+
+drop table if exists `ebook_snapshot`;
+create table `ebook_snapshot` (
+    id bigint auto_increment not null,
+    ebook_id bigint not null default 0,
+    date date not null,
+    view_count int not null default 0,
+    view_increase int not null default 0,
+    vote_increase int not null default 0,
+    primary key (id)
+)
