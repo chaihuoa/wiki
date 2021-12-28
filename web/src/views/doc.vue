@@ -6,9 +6,9 @@
         <a-col :span="6">
           <a-tree
               v-if="level1.length > 0"
-              :tree-data="level1"
               @select="onSelect"
-              :replaceFields="{title: 'name', key: 'id', value: 'id'}"
+              :tree-data="level1"
+              :fieldNames="{children: 'children', title: 'name', key: 'id'}"
               :defaultExpandAll="true"
               :defaultSelectedKeys="defaultSelectedKeys"
           >
