@@ -99,9 +99,9 @@ export default defineComponent({
           docs.value = data.content;
 
           level1.value = [];
-          level1.value = Tool.array2Tree(docs.value, 0);
+          level1.value = Tool.array2Tree(docs.value, 0) || [];
 
-          if (Tool.isNotEmpty(level1)) {
+          if (level1.value.length > 0) {
             defaultSelectedKeys.value = [level1.value[0].id];
             handleQueryContent(level1.value[0].id);
             // 初始显示文档信息
