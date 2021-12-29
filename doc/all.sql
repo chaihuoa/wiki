@@ -106,6 +106,7 @@ create table `ebook_snapshot` (
     ebook_id bigint not null default 0,
     date date not null,
     view_count int not null default 0,
+    vote_count int not null default 0,
     view_increase int not null default 0,
     vote_increase int not null default 0,
     primary key (id)

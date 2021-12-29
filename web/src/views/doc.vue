@@ -15,35 +15,35 @@
           </a-tree>
         </a-col>
 
-        <a-col>
-          <div class="wangeditor" :innerHTML="html"></div>
-        </a-col>
-
-<!--        <a-col :span="18">-->
-<!--          <div>-->
-<!--            <h2>{{ doc.name }}</h2>-->
-<!--            <div>-->
-<!--              <span>阅读数：{{ doc.viewCount }}</span> &nbsp; &nbsp;-->
-<!--              <span>点赞数：{{ doc.voteCount }}</span>-->
-<!--            </div>-->
-<!--            <a-divider style="height: 2px; background-color: #9999cc"/>-->
-<!--          </div>-->
-
+<!--        <a-col>-->
 <!--          <div class="wangeditor" :innerHTML="html"></div>-->
-
-<!--          <div class="vote-div">-->
-<!--            <a-button type="primary" shape="round" :size="'large'" @click="vote">-->
-<!--              <template #icon><LikeOutlined /> &nbsp;点赞：{{ doc.voteCount }} </template>-->
-<!--            </a-button>-->
-<!--          </div>-->
 <!--        </a-col>-->
+
+        <a-col :span="18">
+          <div>
+            <h2>{{ doc.name }}</h2>
+            <div>
+              <span>阅读数：{{ doc.viewCount }}</span> &nbsp; &nbsp;
+              <span>点赞数：{{ doc.voteCount }}</span>
+            </div>
+            <a-divider style="height: 2px; background-color: #9999cc"/>
+          </div>
+
+          <div class="wangeditor" :innerHTML="html"></div>
+
+          <div class="vote-div">
+            <a-button type="primary" shape="round" :size="'large'" @click="vote">
+              <template #icon><LikeOutlined /> &nbsp;点赞：{{ doc.voteCount }} </template>
+            </a-button>
+          </div>
+        </a-col>
       </a-row>
     </a-layout-content>
   </a-layout>
 </template>
 
 <script lang="ts">
-import { defineComponent, onMounted, ref } from 'vue';
+import {defineComponent, onMounted, ref} from 'vue';
 import axios from 'axios';
 import {message} from 'ant-design-vue';
 import {Tool} from "@/util/tool";
@@ -106,6 +106,9 @@ export default defineComponent({
             handleQueryContent(level1.value[0].id);
             // 初始显示文档信息
             doc.value = level1.value[0];
+
+            console.log("###############");
+            console.log(doc.value);
           }
 
         } else {
@@ -138,6 +141,8 @@ export default defineComponent({
 
     onMounted(() => {
       handleQuery();
+      console.log("￥￥￥￥￥￥￥￥￥");
+      console.log(doc.value);
     });
 
     return {
